@@ -8,6 +8,7 @@ const Home = () => {
 
 const [blogs, setBlogs] = useState(null)
 const [name, setName] = useState('Filip')
+const [isPending, setIsPending] = useState(true)
 
 const handleDelete = (id) => {
     const newBlogs = blogs.filter((blog =>  blog.id !== id))
@@ -17,16 +18,19 @@ const handleDelete = (id) => {
 }
 
 useEffect(() => {
+setTimeout(() => {
   axios.get('http://localhost:8000/blogs').then(res => {
     const blogs = res.data;
-  console.log(blogs)
   setBlogs(blogs)
    })
+   setIsPending(false)
+}, 2000)
 }, []) 
 
 
   return (
     <div className='home'>
+      {isPending && <div>Loading...</div>}
       {blogs && <BlogList blogs = {blogs} title = 'Filip is Developer' handleDelete={handleDelete} />}
       {blogs &&  <button onClick={() => setName('luigi')}>Change Name</button>}
       {blogs &&  <p>{name}</p>}
